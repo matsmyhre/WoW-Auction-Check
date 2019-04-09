@@ -1,9 +1,9 @@
 
-var key = "<API-KEY>";
+var key = "<KEY>";
 var data;
 
-var name = "<USER-NAME>";
-var realm = "<REALM>";
+var name = "Chiyome";
+var realm = "Ravencrest";
 
 var icon;
 var itemName;
@@ -40,23 +40,41 @@ checkMarket();
 
 
 //http://auction-api-eu.worldofwarcraft.com/auction-data/ecee6e0f05b6c1c05d9e1c1822a5c11b/auctions.json
+
+// Currently loading from file because of changes to API 
 function checkMarket(){
-  //$.ajax({url: "https://eu.api.battle.net/wow/auction/data/"+realm+"?locale=en_GB&apikey="+key, success: function(result){
-  $.ajax({url: "https://auction-api-eu.worldofwarcraft.com/auction-data/ecee6e0f05b6c1c05d9e1c1822a5c11b/auctions.json", success: function(result){
-    var url =  result.files["0"].url.replace(/^http:\/\//i, 'https://');
-      $.ajax({url: url, success: function(linkResult){
+
+   $.ajax({url: "js/auctions.json",dataType:'json', success: function(linkResult){
 
         data = linkResult.auctions;
         checkAuctions(name);
         console.log(data);
       }});
-  },
-  error: function (xhr, ajaxOptions, thrownError) {
-      alert(xhr.status);
-      alert(thrownError);
-    }
-});
 }
+
+
+
+//function checkMarket(){
+  //$.ajax({url: "https://eu.api.battle.net/wow/auction/data/"+realm+"?locale=en_GB&apikey="+key, success: function(result){
+//  $.ajax({url: "https://auction-api-eu.worldofwarcraft.com/auction-data/ecee6e0f05b6c1c05d9e1c1822a5c11b/auctions.json", success: function(result){
+    //var url =  result.files["0"].url.replace(/^http:\/\//i, 'https://');
+ //   console.log(result);
+  //    $.ajax({url: url, success: function(linkResult){
+
+   //     data = linkResult.auctions;
+   //     checkAuctions(name);
+   //     console.log(data);
+   //   }});
+ // },
+ // error: function (xhr, ajaxOptions, thrownError) {
+ //     alert(xhr.status);
+ //     alert(thrownError);
+ //   }
+//});
+//}
+
+
+
 
 
 
@@ -87,12 +105,14 @@ function checkUnderCut(itemID){
 
 
 function lookupItem(itemID, i){
-  $.ajax({url: "https://eu.api.battle.net/wow/item/"+itemID+"?locale=en_GB&apikey="+key, success: function(itemRes){
+	
+	https://eu.api.blizzard.com/wow/item/18803?locale=en_GB
+  $.ajax({url: "https://eu.api.blizzard.com/wow/item/"+itemID+"?locale=en_GB&access_token="+key+", success: function(itemRes){
       icon = itemRes.icon;
        
       $("#n"+i).html(itemRes.name);
       $("#"+i).attr("src","https://wow.zamimg.com/images/wow/icons/large/"+icon+".jpg")
-      $("#auctions").append("<a href='http://www.wowhead.com/item="+itemID+"/fiery-chain-girdle'</a>");
+      $("#auctions").append("<a href='https://www.wowhead.com/item="+itemID+"/fiery-chain-girdle'</a>");
 
   }});
 }
@@ -116,7 +136,7 @@ for (var i = 0; i < data.length; i++) {
       .attr("id",i);
       
   var aImg = $("<a>")
-      .attr("href","http://www.wowuction.com/eu/ravencrest/alliance/Items/Stats/" + data[i].item)
+      .attr("href","https://www.wowuction.com/eu/ravencrest/alliance/Items/Stats/" + data[i].item)
       .attr("target","_blank");
   
   $(aImg).append(icon);
